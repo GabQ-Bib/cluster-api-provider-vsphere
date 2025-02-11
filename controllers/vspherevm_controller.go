@@ -596,7 +596,7 @@ func (r vmReconciler) retrieveVcenterSession(ctx context.Context, vsphereVM *inf
 
 	// if there is an identityref coming with the vsphereVM, we use that regardless of the state/existence of the cluster & vspherecluster
 	if vsphereVM.Spec.IdentityRef != nil {
-		creds, err := identity.GetCredentialsFromVshpereVM(ctx, r.Client, vsphereVM, r.Namespace)
+		creds, err := identity.GetCredentials(ctx, r.Client, vsphereVM.Spec.IdentityRef, vsphereVM.Namespace, r.Namespace)
 		if err != nil {
 			return nil, err
 		}
@@ -607,6 +607,7 @@ func (r vmReconciler) retrieveVcenterSession(ctx context.Context, vsphereVM *inf
 		// if the vsphereVM doesn't have an identityRef, set the default user identity to that provided by the ControllerManager
 		params = params.WithUserInfo(r.ControllerManagerContext.Username, r.ControllerManagerContext.Password)
 	}
+
 	cluster, err := clusterutilv1.GetClusterFromMetadata(ctx, r.Client, vsphereVM.ObjectMeta)
 	if err != nil {
 		log.V(4).Info("Using credentials provided to the manager to create the authenticated session, VSphereVM is missing cluster label or cluster does not exist")
@@ -628,9 +629,9 @@ func (r vmReconciler) retrieveVcenterSession(ctx context.Context, vsphereVM *inf
 	}
 
 	if vsphereCluster.Spec.IdentityRef != nil {
-		creds, err := identity.GetCredentials(ctx, r.Client, vsphereCluster, r.ControllerManagerContext.Namespace)
+		creds, err := identity.GetCredentials(ctx, r.Client, vsphereCluster.Spec.IdentityRef, vsphereCluster.Namespace, r.ControllerManagerContext.Namespace)
 		if err != nil {
-			return nil, errors.Wrap(err, "failed to get credentials from IdentityRef")
+			return nil, errors.Wrap(err, "failed to get credentials from IdentityRef in vsphere cluster")
 		}
 		params = params.WithUserInfo(creds.Username, creds.Password)
 		return session.GetOrCreate(ctx, params)

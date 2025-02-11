@@ -317,7 +317,7 @@ func (r *VSphereVMReconciler) getVCenterSession(ctx context.Context, vSphereClus
 		return nil, errors.New("vcsim do not support using credentials provided to the manager")
 	}
 
-	creds, err := identity.GetCredentials(ctx, r.Client, vSphereCluster, capvNamespace)
+	creds, err := identity.GetCredentials(ctx, r.Client, vSphereCluster.Spec.IdentityRef, vSphereCluster.Namespace, capvNamespace)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to retrieve credentials from IdentityRef")
 	}

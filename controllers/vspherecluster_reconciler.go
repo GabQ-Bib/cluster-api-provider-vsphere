@@ -274,7 +274,7 @@ func (r *clusterReconciler) reconcileVCenterConnectivity(ctx context.Context, cl
 		WithThumbprint(clusterCtx.VSphereCluster.Spec.Thumbprint)
 
 	if clusterCtx.VSphereCluster.Spec.IdentityRef != nil {
-		creds, err := identity.GetCredentials(ctx, r.Client, clusterCtx.VSphereCluster, r.ControllerManagerContext.Namespace)
+		creds, err := identity.GetCredentials(ctx, r.Client, clusterCtx.VSphereCluster.Spec.IdentityRef, clusterCtx.VSphereCluster.Namespace, r.ControllerManagerContext.Namespace)
 		if err != nil {
 			return nil, pkgerrors.Wrap(err, "failed to get credentials from IdentityRef")
 		}

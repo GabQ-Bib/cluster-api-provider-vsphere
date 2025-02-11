@@ -85,7 +85,7 @@ var _ = Describe("GetCredentials", func() {
 				},
 			}
 			Expect(k8sclient.Update(ctx, cluster)).To(Succeed())
-			creds, err := GetCredentials(ctx, k8sclient, cluster, manager.DefaultPodNamespace)
+			creds, err := GetCredentials(ctx, k8sclient, cluster.Spec.IdentityRef, cluster.Namespace, manager.DefaultPodNamespace)
 			Expect(err).NotTo(HaveOccurred())
 			Expect(creds.Username).To(Equal(getData(credentialSecret, UsernameKey)))
 			Expect(creds.Password).To(Equal(getData(credentialSecret, PasswordKey)))
@@ -101,7 +101,7 @@ var _ = Describe("GetCredentials", func() {
 			}
 			Expect(k8sclient.Update(ctx, cluster)).To(Succeed())
 
-			_, err := GetCredentials(ctx, k8sclient, cluster, manager.DefaultPodNamespace)
+			_, err := GetCredentials(ctx, k8sclient, cluster.Spec.IdentityRef, cluster.Namespace, manager.DefaultPodNamespace)
 			Expect(err).To(HaveOccurred())
 		})
 	})
@@ -127,7 +127,7 @@ var _ = Describe("GetCredentials", func() {
 			}
 			Expect(k8sclient.Update(ctx, cluster)).To(Succeed())
 
-			creds, err := GetCredentials(ctx, k8sclient, cluster, manager.DefaultPodNamespace)
+			creds, err := GetCredentials(ctx, k8sclient, cluster.Spec.IdentityRef, cluster.Namespace, manager.DefaultPodNamespace)
 
 			Expect(err).NotTo(HaveOccurred())
 			Expect(creds.Username).To(Equal(getData(credentialSecret, UsernameKey)))
@@ -157,7 +157,7 @@ var _ = Describe("GetCredentials", func() {
 			}
 			Expect(k8sclient.Update(ctx, cluster)).To(Succeed())
 
-			_, err := GetCredentials(ctx, k8sclient, cluster, manager.DefaultPodNamespace)
+			_, err := GetCredentials(ctx, k8sclient, cluster.Spec.IdentityRef, cluster.Namespace, manager.DefaultPodNamespace)
 			Expect(err).To(HaveOccurred())
 		})
 
@@ -173,7 +173,7 @@ var _ = Describe("GetCredentials", func() {
 			}
 			Expect(k8sclient.Update(ctx, cluster)).To(Succeed())
 
-			_, err := GetCredentials(ctx, k8sclient, cluster, manager.DefaultPodNamespace)
+			_, err := GetCredentials(ctx, k8sclient, cluster.Spec.IdentityRef, cluster.Namespace, manager.DefaultPodNamespace)
 			Expect(err).To(HaveOccurred())
 		})
 
@@ -199,7 +199,7 @@ var _ = Describe("GetCredentials", func() {
 			}
 			Expect(k8sclient.Update(ctx, cluster)).To(Succeed())
 
-			_, err := GetCredentials(ctx, k8sclient, cluster, manager.DefaultPodNamespace)
+			_, err := GetCredentials(ctx, k8sclient, cluster.Spec.IdentityRef, cluster.Namespace, manager.DefaultPodNamespace)
 
 			Expect(err).To(HaveOccurred())
 		})
